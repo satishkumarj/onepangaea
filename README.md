@@ -2,6 +2,8 @@
 
 Send ONE tokens to all live addresses, please follow below steps
 
+(make sure to run the following commands in the same directory where your wallet.sh is present)
+
 **Remove previous script file if exists**
 ```shell
 \rm -rf  send_transactions.p*

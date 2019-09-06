@@ -4,7 +4,7 @@ Send ONE tokens to all live addresses, please follow below steps
 
 **Remove previous script file if exists**
 ```shell
-\rm -rf  send_transactions.p
+\rm -rf  send_transactions.p*
 ```
 
 **Download the latest script**

@@ -5,26 +5,23 @@ import sys
 import getopt
 import time
 
+argv = sys.argv[1:]
 wallet = ''
 shardId = ''
-def readargs(argv):
-    wallet = ''
-    shardId = ''
-    try:
-        opts, args = getopt.getopt(argv,"wa:si",["walletaddress=", "sharedid="])
-    except getopt.GetoptError:
-        print('send_transactions.py -wa your_wallet_address -si shard_id')
-        sys.exit(2)
-    for opt, arg in opts:
-       if opt in ("-wa", "--walletaddress"):
-           wallet = arg
-       elif opt in ("-si", "--sharedid"):
-           shardId = arg
-    if wallet == '' or shardId == '':
-       print('send_transactions.py -wa your_wallet_address -si shard_id')
-       sys.exit(2)
-
-readargs(sys.argv[1:])
+try:
+    opts, args = getopt.getopt(argv,"wa:si",["walletaddress=", "sharedid="])
+except getopt.GetoptError:
+    print('send_transactions.py -wa your_wallet_address -si shard_id')
+    sys.exit(2)
+for opt, arg in opts:
+   if opt in ("-wa", "--walletaddress"):
+       wallet = arg
+   elif opt in ("-si", "--sharedid"):
+       shardId = arg
+if wallet == '' or shardId == '':
+   print('send_transactions.py -wa your_wallet_address -si shard_id')
+   sys.exit(2)
+   
 while(1):
     response = json.loads(requests.get("https://harmony.one/pga/network.json").text)
     online_addresses = []

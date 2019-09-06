@@ -21,6 +21,8 @@ python3 send_transactions.py -a your_wallet_address -s your_shard_id
 Now program will run continueosly, if you would like to Kill the program, use
 **Ctrl-Z** 
 
+This program is tested on Linux running on the Vultr instance, it should work with other vps also you might require to install some dependencies 
 
+Please ping me in Telegram, I will try my best to help you run it.
 
 

@@ -9,17 +9,17 @@ argv = sys.argv[1:]
 wallet = ''
 shardId = ''
 try:
-    opts, args = getopt.getopt(argv,"aw:si",["walletaddress=", "sharedid="])
+    opts, args = getopt.getopt(argv,"a:s:",["walletaddress=", "sharedid="])
 except getopt.GetoptError:
-    print('python3 send_transactions.py -a your_wallet_address -i shard_id')
+    print('python3 send_transactions.py -a your_wallet_address -s shard_id')
     sys.exit(2)
 for opt, arg in opts:
    if opt in ("-a", "--walletaddress"):
        wallet = arg
-   elif opt in ("-i", "--sharedid"):
+   elif opt in ("-s", "--sharedid"):
        shardId = arg
 if wallet == '' or shardId == '':
-   print('python3 send_transactions.py -a your_wallet_address -i shard_id')
+   print('python3 send_transactions.py -a your_wallet_address -s shard_id')
    sys.exit(2)
    
 while(1):
@@ -38,7 +38,7 @@ while(1):
     for i in range(len(online_addresses)):
         transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.0001 --pass pass: --shardID {}'.format(wallet, online_addresses[i], shardId)
         os.system(transfer)
-        if i == 3:
+        if i == 1:
             sys.exit(2)
         time.sleep(1)
         print(online_addresses[i])

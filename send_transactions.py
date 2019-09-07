@@ -37,8 +37,12 @@ while(1):
     online_addresses = sum(online_addresses, [])
     for i in range(len(online_addresses)):
         transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.0001 --pass pass: --shardID {}'.format(wallet, online_addresses[i], shardId)
-        print("Sending 0.0001 ONE to {}".format(online_addresses[i]))
-        os.system(transfer)
+        try:
+            print("Sending 0.0001 ONE to {}".format(online_addresses[i]))
+            os.system(transfer)    
+        except getopt.GetoptError:
+            print('Exiting due to error executing transfer')
+            sys.exit(2)
         #if i == 1:
         #    sys.exit(2)
         time.sleep(2)

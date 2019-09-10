@@ -34,18 +34,19 @@ while(1):
                 if bool(nodes):
                     online_addresses.append(nodes['online'])
     
-    online_addresses = sum(online_addresses, [])
-    for i in range(len(online_addresses)):
-        transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.0001 --pass pass: --shardID {}'.format(wallet, online_addresses[i], shardId)
-        try:
-            print("Sending 0.0001 ONE to {}".format(online_addresses[i]))
-            os.system(transfer)    
-        except getopt.GetoptError:
-            print('Exiting due to error executing transfer')
-            sys.exit(2)
-        #if i == 1:
-        #    sys.exit(2)
-        time.sleep(2)
-        
+    for j in range(len(online_addresses)):
+        addresses = online_addresses[j]
+        for i in range(len(addresses)):
+            transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.0001 --pass pass:  --toShardID {} --shardID {}'.format(wallet, online_addresses[i], j, shardId)
+            try:
+                print("Sending 0.0001 ONE to {}".format(online_addresses[i]))
+                os.system(transfer)    
+            except getopt.GetoptError:
+                print('Exiting due to error executing transfer')
+                sys.exit(2)
+            #if i == 1:
+            #    sys.exit(2)
+            time.sleep(2)
+    
 
 

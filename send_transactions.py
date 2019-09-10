@@ -33,20 +33,23 @@ while(1):
                 nodes = shard['nodes'] 
                 if bool(nodes):
                     online_addresses.append(nodes['online'])
-    
+    with open('sent_addresses.txt', 'r') as f:
+        sent_addresses = f.readlines()
     for j in range(len(online_addresses)):
         addresses = online_addresses[j]
         for i in range(len(addresses)):
-            transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.0001 --pass pass:  --toShardID {} --shardID {}'.format(wallet, addresses[i], j, shardId)
-            try:
-                print("Sending 0.0001 ONE to {}".format(addresses[i]))
-                os.system(transfer)    
-            except getopt.GetoptError:
-                print('Exiting due to error executing transfer')
-                sys.exit(2)
-            #if i == 1:
-            #    sys.exit(2)
-            time.sleep(2)
+            if not addresses[i] in sent_addresses:
+                transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.0001 --pass pass:  --toShardID {} --shardID {}'.format(wallet, addresses[i], j, shardId)
+                try:
+                    print("Sending 0.0001 ONE to {}".format(addresses[i]))
+                    os.system(transfer)    
+                except getopt.GetoptError:
+                    print('Exiting due to error executing transfer')
+                    sys.exit(2)
+                #if i == 1:
+                #    sys.exit(2)
+                with open('sent_addresses.txt', 'w') as f:
+                    f.write("%s\n" % addresses[i])
+                time.sleep(2)
     
-
-
+    open("sent_addresses.txt", "w").close()

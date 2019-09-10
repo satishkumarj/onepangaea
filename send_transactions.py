@@ -10,6 +10,7 @@ import io
 #argv = sys.argv[1:]
 wallet = 'one18ndk75w6nea5x7nxjhvv0xj6zfdsc7nks3f778'
 shardId = '0'
+sent_addresses_file = "sent_addresses.txt" #D:\HarmonyOne\onepangaea\sent_addresses.txt
 """try:
     opts, args = getopt.getopt(argv,"a:s:",["walletaddress=", "sharedid="])
 except getopt.GetoptError:
@@ -39,23 +40,25 @@ while(1):
                 if bool(nodes):
                     online_addresses.append(nodes['online'])
     """
-    with open('sent_addresses.txt', 'r') as f:
+    with open(sent_addresses_file, 'r') as f:
         sent_addresses = f.readlines()
-    for row in ds:
-        addr = row[0]
-        to_shardId = row[1]
-        if not addr in sent_addresses and row[2] == 'Online':
-            transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.01 --pass pass:  --toShardID {} --shardID {}'.format(wallet, addr, to_shardId, shardId)
-            try:
-                print("Sending 0.01 ONE to {}".format(addr))
-                os.system(transfer)    
-            except getopt.GetoptError:
-                print('Exiting due to error executing transfer')
-                sys.exit(2)
-            #if i == 1:
-            #    sys.exit(2)
-            with open('sent_addresses.txt', 'w') as f:
-                f.write("%s\n" % addr)
-            time.sleep(2)
+    for  index,row in ds.iterrows():
+        addr = row["Address"]
+        to_shardId = row["Shard"]
+        print("Address", addr)
+        if not addr in sent_addresses:
+            if row["Online"]:
+                transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.01 --pass pass:  --toShardID {} --shardID {}'.format(wallet, addr, to_shardId, shardId)
+                try:
+                    print("Sending 0.01 ONE to {}".format(addr))
+                    os.system(transfer)    
+                except getopt.GetoptError:
+                    print('Exiting due to error executing transfer')
+                    sys.exit(2)
+                #if i == 1:
+                #    sys.exit(2)
+                with open(sent_addresses_file, 'a+') as f:
+                    f.write("%s\n" % addr)
+                time.sleep(2)
     
-    open("sent_addresses.txt", "w").close()
+    open(sent_addresses_file, "w").close()

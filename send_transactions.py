@@ -39,9 +39,9 @@ while(1):
         addresses = online_addresses[j]
         for i in range(len(addresses)):
             if not addresses[i] in sent_addresses:
-                transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.0001 --pass pass:  --toShardID {} --shardID {}'.format(wallet, addresses[i], j, shardId)
+                transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.01 --pass pass:  --toShardID {} --shardID {}'.format(wallet, addresses[i], j, shardId)
                 try:
-                    print("Sending 0.0001 ONE to {}".format(addresses[i]))
+                    print("Sending 0.01 ONE to {}".format(addresses[i]))
                     os.system(transfer)    
                 except getopt.GetoptError:
                     print('Exiting due to error executing transfer')

@@ -4,13 +4,13 @@ import os
 import sys
 import getopt
 import time
-import csv
-import urllib.request
+import pandas as pd
+import io
 
-argv = sys.argv[1:]
-wallet = ''
-shardId = ''
-try:
+#argv = sys.argv[1:]
+wallet = 'one18ndk75w6nea5x7nxjhvv0xj6zfdsc7nks3f778'
+shardId = '0'
+"""try:
     opts, args = getopt.getopt(argv,"a:s:",["walletaddress=", "sharedid="])
 except getopt.GetoptError:
     print('python3 send_transactions.py -a your_wallet_address -s shard_id')
@@ -23,12 +23,11 @@ for opt, arg in opts:
 if wallet == '' or shardId == '':
    print('python3 send_transactions.py -a your_wallet_address -s shard_id')
    sys.exit(2)
-   
+"""
 while(1):    
-    url = 'https://harmony.one/pga/network.csv'
-    response = urllib2.request.urlopen(url)
-    cr = csv.reader(response)
-    
+    url = "https://harmony.one/pga/network.csv"
+    s = requests.get(url).content
+    ds = pd.read_csv(io.StringIO(s.decode('utf-8')))
     """response = json.loads(requests.get("https://harmony.one/pga/network.json").text)
     online_addresses = []
     shards = response['shards']
@@ -42,10 +41,11 @@ while(1):
     """
     with open('sent_addresses.txt', 'r') as f:
         sent_addresses = f.readlines()
-    for i in range(len(cr)):
-        addr = cr[0] 
-        if not addr in sent_addresses and cr[2] == 'Online':
-            transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.01 --pass pass:  --toShardID {} --shardID {}'.format(wallet, addr, cr[1], shardId)
+    for row in ds:
+        addr = row[0]
+        to_shardId = row[1]
+        if not addr in sent_addresses and row[2] == 'Online':
+            transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.01 --pass pass:  --toShardID {} --shardID {}'.format(wallet, addr, to_shardId, shardId)
             try:
                 print("Sending 0.01 ONE to {}".format(addr))
                 os.system(transfer)    

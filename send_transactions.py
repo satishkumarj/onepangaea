@@ -41,12 +41,11 @@ while(1):
                     online_addresses.append(nodes['online'])
     """
     with open(sent_addresses_file, 'r') as f:
-        sent_addresses = f.readlines()
+        sent_addresses = f.read().replace('\n', ' ')
     for  index,row in ds.iterrows():
         addr = row["Address"]
         to_shardId = row["Shard"]
-        print("Address", addr)
-        if not addr in sent_addresses:
+        if sent_addresses.find(addr) < 0:
             if row["Online"]:
                 transfer = './wallet.sh -t transfer --from {} --to {} --amount 0.01 --pass pass:  --toShardID {} --shardID {}'.format(wallet, addr, to_shardId, shardId)
                 try:
@@ -58,7 +57,7 @@ while(1):
                 #if i == 1:
                 #    sys.exit(2)
                 with open(sent_addresses_file, 'a+') as f:
-                    f.write("%s\n" % addr)
+                    f.write("%s " % addr)
                 time.sleep(2)
     
     open(sent_addresses_file, "w").close()
